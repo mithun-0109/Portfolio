@@ -66,23 +66,18 @@ const smoothScroll = (target, duration) => {
 
 
 // Load Projects from Admin Panel (LocalStorage)
+// Load Projects from projects.js
 const loadProjects = () => {
-    const PROJECTS_KEY = 'mithun_portfolio_projects';
     const grid = document.getElementById('works-grid');
     if (!grid) return;
 
+    // Use global variable from projects.js
     let projects = [];
-    const data = localStorage.getItem(PROJECTS_KEY);
-    if (data) {
-        try {
-            projects = JSON.parse(data);
-        } catch (e) {
-            console.error('Error parsing projects', e);
-        }
-    }
-
-    // Fallback if no projects found
-    if (projects.length === 0) {
+    if (typeof portfolioProjects !== 'undefined') {
+        projects = portfolioProjects;
+    } else {
+        console.error("Projects data not loaded");
+        // Fallback
         projects = [
             { title: 'Project One', description: 'A web application built with modern technologies.', image: '' },
             { title: 'Project Two', description: 'Creative design project focusing on user experience.', image: '' },
@@ -97,10 +92,8 @@ const loadProjects = () => {
         // Use blog card style
         card.className = 'blog-card fade-in';
 
+        // Check if image path is valid/local or needs placeholder
         const imgUrl = p.image || 'https://via.placeholder.com/600x400?text=No+Image';
-
-        // Check if we are on works page (blog style) or index page (if generic reuse)
-        // Since we removed works-grid from index.html, this will only run on works.html if ID matches.
 
         card.innerHTML = `
             <img src="${imgUrl}" alt="${p.title}" class="blog-image">
@@ -116,27 +109,23 @@ const loadProjects = () => {
 }
 
 // Load Contacts from Admin Panel (LocalStorage)
+// Load Contacts from projects.js
 const loadContactsFromStorage = () => {
-    const CONTACTS_KEY = 'mithun_portfolio_contacts';
-    const data = localStorage.getItem(CONTACTS_KEY);
+    // Check if portfolioContacts is defined (loaded from projects.js)
+    if (typeof portfolioContacts !== 'undefined') {
+        const contacts = portfolioContacts;
 
-    if (data) {
-        try {
-            const contacts = JSON.parse(data);
+        const gh = document.getElementById('link-github');
+        const li = document.getElementById('link-linkedin');
+        const insta = document.getElementById('link-instagram');
+        const email = document.getElementById('link-email');
 
-            const gh = document.getElementById('link-github');
-            const li = document.getElementById('link-linkedin');
-            const insta = document.getElementById('link-instagram');
-            const email = document.getElementById('link-email');
-
-            if (gh && contacts.github) gh.href = contacts.github;
-            if (li && contacts.linkedin) li.href = contacts.linkedin;
-            if (insta && contacts.instagram) insta.href = contacts.instagram;
-            if (email && contacts.email) email.href = `mailto:${contacts.email}`;
-
-        } catch (e) {
-            console.error('Error parsing contacts', e);
-        }
+        if (gh && contacts.github) gh.href = contacts.github;
+        if (li && contacts.linkedin) li.href = contacts.linkedin;
+        if (insta && contacts.instagram) insta.href = contacts.instagram;
+        if (email && contacts.email) email.href = `mailto:${contacts.email}`;
+    } else {
+        console.error("Contacts data not loaded");
     }
 }
 

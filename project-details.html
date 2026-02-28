@@ -131,6 +131,7 @@
     </footer>
 
     <div class="cursor"></div>
+    <script src="projects.js"></script>
     <script src="script.js"></script>
     <script>
         // Specific logic to load project data
@@ -140,10 +141,9 @@
             const PROJECTS_KEY = 'mithun_portfolio_projects';
 
             if (index !== null) {
-                const data = localStorage.getItem(PROJECTS_KEY);
-                if (data) {
-                    const projects = JSON.parse(data);
-                    const project = projects[index];
+                // Ensure portfolioProjects is loaded
+                if (typeof portfolioProjects !== 'undefined') {
+                    const project = portfolioProjects[index];
 
                     if (project) {
                         document.title = `${project.title} - Mithun`;
@@ -161,6 +161,8 @@
                     } else {
                         document.getElementById('pDetailTitle').textContent = 'Project Not Found';
                     }
+                } else {
+                    console.error("Projects data not loaded");
                 }
             } else {
                 document.getElementById('pDetailTitle').textContent = 'Project Not Found';
